@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <link rel="stylesheet" href="task-list.component.css">
+</head>
+<body>
+  <div class="container">
+    <div class="text-center mt-4">
+      <h1>To Do List</h1>
+    </div>
+    
+    <div *ngIf="taskService.tasks.length === 0" class="alert alert-danger text-center mt-3">No Tasks Found...</div>
+    
+    <ul class="list-group mt-3">
+      <li *ngFor="let task of taskService.tasks; let i = index" class="list-group-item border border-primary rounded-lg mb-3">
+        <div>
+          <h3 class="mb-1">Name: {{ task.name }}</h3>
+          <p class="mb-1">Description: {{ task.description }}</p>
+          <p class="mb-1"><small>Due Date: {{ task.dueDate }}</small></p>
+          <p class="mb-1">Status: {{ task.completed ? 'Completed' : 'Pending' }}</p>
+        </div>
+        <div class="btn-group" role="group">
+          <label class="btn btn-secondary">
+            <input type="checkbox" [(ngModel)]="task.completed"/> Completed?
+          </label>
+          <button type="button" (click)="editTask(task)" class="btn btn-info">Edit</button>
+          <button type="button" (click)="deleteTask(i)" class="btn btn-danger">Delete</button>
+        </div>
+        <div *ngIf="editingTask === task" class="edit-task">
+          <input type="text" #editedTitle placeholder="Title" value="{{task.name}}"><br>
+          <input type="text" #editedDescription placeholder="Description" value="{{task.description}}"><br>
+          <input type="date" #editedDueDate [value]="task.dueDate | date:'yyyy-MM-dd'"><br>
+          <button class="save-btn btn btn-success" (click)="saveEditedTask(editedTitle.value, editedDescription.value, editedDueDate.value)"> Save</button>
+          <button class="cancel-btn btn btn-secondary" (click)="cancelEdit()"> Cancel</button>
+        </div>
+      </li>
+    </ul>
+    
+    <div class="text-center mt-4">
+      <button type="button" routerLink="/add-task" class="btn btn-success btn-wide">Add Task</button>
+    </div>
+    
+    <div class="author-box mt-5 text-center">
+      <p>Todo List Project Using Angular</p>
+      <p>Created By: Amr Mohamed</p>
+      <p>&copy; 2024</p>
+    </div>
+  </div>
+</body>
+</html>
